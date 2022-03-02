@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 // void main() {
 //   runApp(MyApp());
 // }
@@ -19,12 +19,26 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  var questionIndex = 0;
+  var _questionIndex = 0;
 
-  void answerQuestion() {
-    print("Answer Chosen");
+  final _questions = [
+    {
+      "questionText": "What's your favourite colour?",
+      "answers": ["Black", "Red", "Green", "White"]
+    },
+    {
+      "questionText": "What's your favourite animal?",
+      "answers": ["Rabbit", "Snake", "Elephant", "Lion"]
+    },
+    {
+      "questionText": "Who's your favorite Stew?",
+      "answers": ["Stew", "Stew", "Stew", "Stew"]
+    }
+  ];
+
+  void _answerQuestion() {
     setState(() {
-      questionIndex++;
+      _questionIndex++;
     });
   }
 
@@ -33,20 +47,6 @@ class MyAppState extends State<MyApp> {
   // let dart know that the override is deliberate.
   Widget build(BuildContext context) {
     // a map is like a js object or a ruby hash.
-    var questions = [
-      {
-        "questionText": "What's your favourite colour?",
-        "answers": ["Black", "Red", "Green", "White"]
-      },
-      {
-        "questionText": "What's your favourite animal?",
-        "answers": ["Rabbit", "Snake", "Elephant", "Lion"]
-      },
-      {
-        "questionText": "Who's your favorite Stew?",
-        "answers": ["Stew", "Stew", "Stew", "Stew"]
-      }
-    ];
 
     return MaterialApp(
       // scaffold creates a basic page design (color, layout etc.)
@@ -56,22 +56,13 @@ class MyAppState extends State<MyApp> {
         ),
         // body can only take 1 widget
         // there are different types of widgets (visible and invisible)
-        body: Column(
-          // because of inference, I don't need have widget specified as a type.
-          // flutter figures out the type based on what's in the list.
-          children: <Widget>[
-            Question(
-              questions[questionIndex]["questionText"],
-            ),
-            // the spread operator removes the nested array left by the map method
-            // therefore taking each answer widget and adding it to the original
-            // children list.
-            ...(questions[questionIndex]["answers"] as List<String>)
-                .map((answer) {
-              return Answer(answerQuestion, answer);
-            }).toList()
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questions: _questions,
+                questionIndex: _questionIndex,
+              )
+            : Result(),
       ),
     );
   }
