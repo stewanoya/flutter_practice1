@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
+import './question.dart';
 // void main() {
 //   runApp(MyApp());
 // }
@@ -45,7 +48,9 @@ class MyAppState extends State<MyApp> {
           // because of inference, I don't need have widget specified as a type.
           // flutter figures out the type based on what's in the list.
           children: <Widget>[
-            Text(questions[questionIndex]),
+            Question(
+              questions[questionIndex],
+            ),
             // raised button is deprecated. ElevatedButton is the replacement.
             RaisedButton(
               child: Text("Answer 1"),
