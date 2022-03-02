@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import './question.dart';
+import './answer.dart';
 // void main() {
 //   runApp(MyApp());
 // }
@@ -31,9 +32,20 @@ class MyAppState extends State<MyApp> {
   // that I'm extending
   // let dart know that the override is deliberate.
   Widget build(BuildContext context) {
+    // a map is like a js object or a ruby hash.
     var questions = [
-      "What's your favourite colour?",
-      "What's your favourite animal?",
+      {
+        "questionText": "What's your favourite colour?",
+        "answers": ["Black", "Red", "Green", "White"]
+      },
+      {
+        "questionText": "What's your favourite animal?",
+        "answers": ["Rabbit", "Snake", "Elephant", "Lion"]
+      },
+      {
+        "questionText": "Who's your favorite Stew?",
+        "answers": ["Stew", "Stew", "Stew", "Stew"]
+      }
     ];
 
     return MaterialApp(
@@ -49,21 +61,15 @@ class MyAppState extends State<MyApp> {
           // flutter figures out the type based on what's in the list.
           children: <Widget>[
             Question(
-              questions[questionIndex],
+              questions[questionIndex]["questionText"],
             ),
-            // raised button is deprecated. ElevatedButton is the replacement.
-            RaisedButton(
-              child: Text("Answer 1"),
-              onPressed: answerQuestion,
-            ),
-            RaisedButton(
-              child: Text("Answer 2"),
-              onPressed: answerQuestion,
-            ),
-            RaisedButton(
-              child: Text("Answer 3"),
-              onPressed: answerQuestion,
-            ),
+            // the spread operator removes the nested array left by the map method
+            // therefore taking each answer widget and adding it to the original
+            // children list.
+            ...(questions[questionIndex]["answers"] as List<String>)
+                .map((answer) {
+              return Answer(answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
